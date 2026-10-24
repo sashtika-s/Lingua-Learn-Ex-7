@@ -1,0 +1,835 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinguaLearn - Language Learning Platform</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #172554;
+            background: #f5f8ff;
+            line-height: 1.5;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #dbeafe;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .nav {
+            max-width: 1120px;
+            margin: auto;
+            padding: 15px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .brand span {
+            color: #172554;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            color: #334155;
+            text-decoration: none;
+            padding: 9px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        main {
+            max-width: 1120px;
+            margin: 28px auto;
+            padding: 0 22px;
+        }
+
+        .hero {
+            background: linear-gradient(115deg, #dbeafe, #eff6ff, #e0f2fe);
+            border: 1px solid #bfdbfe;
+            border-radius: 18px;
+            padding: 34px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: clamp(27px, 4vw, 38px);
+        }
+
+        .hero p {
+            color: #475569;
+            max-width: 600px;
+            margin: 0 0 20px;
+        }
+
+        .hero-art {
+            font-size: 70px;
+            white-space: nowrap;
+        }
+
+        .button {
+            display: inline-block;
+            border: 0;
+            background: #2563eb;
+            color: white;
+            border-radius: 9px;
+            padding: 11px 17px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background: #1e40af;
+        }
+
+        .button.secondary {
+            color: #2563eb;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+        }
+
+        section {
+            margin-top: 30px;
+            scroll-margin-top: 90px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 23px;
+            margin: 0;
+        }
+
+        .section-heading p {
+            color: #64748b;
+            margin: 4px 0 0;
+            font-size: 14px;
+        }
+
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 17px;
+        }
+
+        .language-card, .panel {
+            background: white;
+            border: 1px solid #dbeafe;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 5px 18px #2563eb0a;
+        }
+
+        .language-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .language-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 22px #2563eb19;
+        }
+
+        .flag {
+            width: 53px;
+            height: 53px;
+            display: grid;
+            place-items: center;
+            background: #eff6ff;
+            border-radius: 12px;
+            font-size: 29px;
+        }
+
+        .language-card h3 {
+            margin: 13px 0 4px;
+            font-size: 19px;
+        }
+
+        .language-card p {
+            color: #64748b;
+            margin: 0 0 14px;
+            font-size: 14px;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 12px;
+            color: #2563eb;
+            background: #eff6ff;
+            padding: 4px 8px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 12px 0 7px;
+        }
+
+        select, input[type="search"] {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            padding: 11px 12px;
+            background: white;
+            color: #172554;
+            font: inherit;
+        }
+
+        .word-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .word-item {
+            background: #f8fbff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .word-item strong {
+            display: block;
+            color: #1e40af;
+        }
+
+        .word-item span {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .quiz-question {
+            background: #eff6ff;
+            border-radius: 12px;
+            padding: 18px;
+            margin: 15px 0;
+        }
+
+        .quiz-question .small {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .quiz-question h3 {
+            margin: 5px 0 0;
+            font-size: 22px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .option {
+            border: 1px solid #cbd5e1;
+            background: white;
+            color: #172554;
+            padding: 12px;
+            border-radius: 9px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .option:hover:not(:disabled) {
+            border-color: #2563eb;
+            background: #f8fbff;
+        }
+
+        .option:disabled {
+            cursor: default;
+        }
+
+        .option.correct {
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+
+        .option.wrong {
+            border-color: #dc2626;
+            background: #fef2f2;
+        }
+
+        #feedback {
+            min-height: 25px;
+            font-weight: bold;
+            margin: 13px 0;
+        }
+
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .progress-track {
+            height: 9px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0;
+            background: #2563eb;
+            transition: width 0.3s;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .stat {
+            background: #f8fbff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            padding: 15px 8px;
+        }
+
+        .stat strong {
+            display: block;
+            color: #2563eb;
+            font-size: 25px;
+        }
+
+        .stat span {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            padding: 25px 15px;
+            margin-top: 35px;
+            border-top: 1px solid #dbeafe;
+            background: white;
+        }
+
+        @media (max-width: 760px) {
+            .nav {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .hero {
+                padding: 25px;
+            }
+
+            .hero-art {
+                font-size: 48px;
+            }
+
+            .language-grid, .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 460px) {
+            main {
+                padding: 0 13px;
+            }
+
+            .hero-art {
+                display: none;
+            }
+
+            .word-list, .options, .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="nav">
+        <div class="brand">✦ Lingua<span>Learn</span></div>
+
+        <nav class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#languages">Languages</a>
+            <a href="#vocabulary">Vocabulary</a>
+            <a href="#quiz">Practice Quiz</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+
+    <section class="hero" id="home" style="margin-top:0">
+        <div>
+            <span class="tag">LEARN • PRACTISE • IMPROVE</span>
+            <h1>Discover a new language.<br>Open a new world.</h1>
+            <p>
+                Build your vocabulary and test your knowledge
+                with short, interactive language lessons.
+            </p>
+            <a class="button" href="#languages">Explore Languages →</a>
+        </div>
+
+        <div class="hero-art"></div>
+    </section>
+
+    <section id="languages">
+        <div class="section-heading">
+            <div>
+                <h2>Choose Your Language</h2>
+                <p>Select a course to start learning everyday words.</p>
+            </div>
+        </div>
+
+        <div class="language-grid">
+
+            <article class="language-card">
+                <div class="flag">🇮🇳</div>
+                <h3>Hindi</h3>
+                <p>Learn common Hindi words and greetings.</p>
+                <span class="tag">Beginner</span><br>
+                <button class="button choose-language"
+                        data-language="Hindi">Start Learning →</button>
+            </article>
+
+            <article class="language-card">
+                <div class="flag">🇫🇷</div>
+                <h3>French</h3>
+                <p>Practise French words for everyday conversations.</p>
+                <span class="tag">Beginner</span><br>
+                <button class="button choose-language"
+                        data-language="French">Start Learning →</button>
+            </article>
+
+            <article class="language-card">
+                <div class="flag">🇯🇵</div>
+                <h3>Japanese</h3>
+                <p>Discover useful Japanese words and meanings.</p>
+                <span class="tag">Beginner</span><br>
+                <button class="button choose-language"
+                        data-language="Japanese">Start Learning →</button>
+            </article>
+
+        </div>
+    </section>
+
+    <section id="vocabulary">
+        <div class="section-heading">
+            <div>
+                <h2>Vocabulary Library</h2>
+                <p>Choose a language and revise its vocabulary.</p>
+            </div>
+        </div>
+
+        <div class="panel">
+            <label for="language-select">Learning language</label>
+
+            <select id="language-select">
+                <option value="Hindi">Hindi</option>
+                <option value="French">French</option>
+                <option value="Japanese">Japanese</option>
+            </select>
+
+            <div id="word-list" class="word-list"></div>
+        </div>
+    </section>
+
+    <section id="quiz">
+        <div class="section-heading">
+            <div>
+                <h2>Test Your Knowledge</h2>
+                <p>Choose the correct meaning to earn points.</p>
+            </div>
+        </div>
+
+        <div class="two-column">
+
+            <div class="panel">
+                <label for="quiz-language">Quiz language</label>
+
+                <select id="quiz-language">
+                    <option value="Hindi">Hindi</option>
+                    <option value="French">French</option>
+                    <option value="Japanese">Japanese</option>
+                </select>
+
+                <div class="quiz-question">
+                    <div class="small" id="question-count">QUESTION 1</div>
+                    <h3 id="question">Loading question...</h3>
+                </div>
+
+                <div id="options" class="options"></div>
+                <p id="feedback" aria-live="polite"></p>
+
+                <div class="quiz-footer">
+                    <span id="quiz-status">Choose an answer.</span>
+                    <button id="next-question" class="button" disabled>
+                        Next Question →
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Your Learning Summary</h2>
+                <p style="color:#64748b">
+                    Your score updates as you answer the quiz questions.
+                </p>
+
+                <div class="stats">
+                    <div class="stat">
+                        <strong id="answered">0</strong>
+                        <span>Attempted</span>
+                    </div>
+
+                    <div class="stat">
+                        <strong id="correct">0</strong>
+                        <span>Correct</span>
+                    </div>
+
+                    <div class="stat">
+                        <strong id="accuracy">0%</strong>
+                        <span>Accuracy</span>
+                    </div>
+                </div>
+
+                <h3 style="margin-top:24px">Quiz Progress</h3>
+
+                <div class="progress-track">
+                    <div id="progress-bar"></div>
+                </div>
+
+                <p id="progress-text"
+                   style="color:#64748b;font-size:14px">
+                    0 of 5 questions answered
+                </p>
+
+                <button id="restart" class="button secondary">
+                    Restart Quiz
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    LinguaLearn | Language Learning Platform | jQuery Lab Experiment
+</footer>
+
+<script>
+$(document).ready(function () {
+
+    // Vocabulary data for three languages
+    const vocabulary = {
+        Hindi: [
+            { word: "Namaste", meaning: "Hello" },
+            { word: "Dhanyavaad", meaning: "Thank you" },
+            { word: "Paani", meaning: "Water" },
+            { word: "Kitaab", meaning: "Book" },
+            { word: "Dost", meaning: "Friend" }
+        ],
+
+        French: [
+            { word: "Bonjour", meaning: "Hello" },
+            { word: "Merci", meaning: "Thank you" },
+            { word: "Eau", meaning: "Water" },
+            { word: "Livre", meaning: "Book" },
+            { word: "Ami", meaning: "Friend" }
+        ],
+
+        Japanese: [
+            { word: "Konnichiwa", meaning: "Hello" },
+            { word: "Arigatou", meaning: "Thank you" },
+            { word: "Mizu", meaning: "Water" },
+            { word: "Hon", meaning: "Book" },
+            { word: "Tomodachi", meaning: "Friend" }
+        ]
+    };
+
+    let questionIndex = 0;
+    let answered = 0;
+    let correct = 0;
+    let hasAnswered = false;
+
+    // Display vocabulary words using jQuery
+    function showVocabulary() {
+        const language = $("#language-select").val();
+
+        $("#word-list").empty();
+
+        $.each(vocabulary[language], function (index, item) {
+            const card = $("<div>").addClass("word-item");
+
+            $("<strong>").text(item.word).appendTo(card);
+            $("<span>").text(item.meaning).appendTo(card);
+
+            $("#word-list").append(card);
+        });
+    }
+
+    // Generate multiple-choice options
+    function makeOptions(correctMeaning, allWords) {
+        const choices = [correctMeaning];
+
+        while (choices.length < Math.min(4, allWords.length)) {
+            const randomMeaning =
+                allWords[Math.floor(Math.random() * allWords.length)].meaning;
+
+            if ($.inArray(randomMeaning, choices) === -1) {
+                choices.push(randomMeaning);
+            }
+        }
+
+        return choices.sort(function () {
+            return Math.random() - 0.5;
+        });
+    }
+
+    // Display the current quiz question
+    function showQuestion() {
+        const language = $("#quiz-language").val();
+        const words = vocabulary[language];
+
+        hasAnswered = false;
+        $("#feedback").text("");
+        $("#options").empty();
+        $("#next-question").prop("disabled", true);
+
+        if (questionIndex >= words.length) {
+            $("#question-count").text("QUIZ COMPLETED");
+            $("#question").text("Great work! 🎉");
+
+            $("#quiz-status").text("You completed all questions.");
+
+            $("#options").append(
+                $("<p>").text(
+                    "Final score: " + correct + " out of " + words.length
+                )
+            );
+
+            return;
+        }
+
+        const current = words[questionIndex];
+
+        $("#question-count").text(
+            "QUESTION " + (questionIndex + 1) + " OF " + words.length
+        );
+
+        $("#question").text(
+            "What does '" + current.word + "' mean?"
+        );
+
+        $("#quiz-status").text("Select one answer.");
+
+        $.each(makeOptions(current.meaning, words), function (index, choice) {
+            $("<button>")
+                .addClass("option")
+                .text(choice)
+                .attr("data-answer", choice)
+                .appendTo("#options");
+        });
+    }
+
+    // Update score and progress display
+    function updateSummary() {
+        const accuracy = answered === 0
+            ? 0
+            : Math.round((correct / answered) * 100);
+
+        $("#answered").text(answered);
+        $("#correct").text(correct);
+        $("#accuracy").text(accuracy + "%");
+
+        $("#progress-bar").css(
+            "width",
+            (answered / 5 * 100) + "%"
+        );
+
+        $("#progress-text").text(
+            Math.min(answered, 5) + " of 5 questions answered"
+        );
+    }
+
+    // Check the selected answer
+    $("#options").on("click", ".option", function () {
+        if (hasAnswered ||
+            questionIndex >= vocabulary[$("#quiz-language").val()].length) {
+            return;
+        }
+
+        hasAnswered = true;
+        answered++;
+
+        const language = $("#quiz-language").val();
+        const answer = vocabulary[language][questionIndex].meaning;
+        const selected = $(this).attr("data-answer");
+
+        $(".option").each(function () {
+            const value = $(this).attr("data-answer");
+
+            $(this).prop("disabled", true);
+
+            if (value === answer) {
+                $(this).addClass("correct");
+            }
+        });
+
+        if (selected === answer) {
+            correct++;
+
+            $("#feedback")
+                .css("color", "#15803d")
+                .text("Correct! Well done.");
+        } else {
+            $(this).addClass("wrong");
+
+            $("#feedback")
+                .css("color", "#b91c1c")
+                .text("Incorrect. Correct answer: " + answer);
+        }
+
+        $("#quiz-status").text("Answer recorded.");
+        $("#next-question").prop("disabled", false);
+
+        updateSummary();
+    });
+
+    // Change vocabulary language
+    $("#language-select").on("change", function () {
+        showVocabulary();
+    });
+
+    // Start a course from a language card
+    $(".choose-language").on("click", function () {
+        const language = $(this).attr("data-language");
+
+        $("#language-select").val(language);
+        $("#quiz-language").val(language);
+
+        showVocabulary();
+
+        questionIndex = 0;
+        showQuestion();
+
+        document.getElementById("vocabulary").scrollIntoView({
+            behavior: "smooth"
+        });
+    });
+
+    // Change quiz language
+    $("#quiz-language").on("change", function () {
+        questionIndex = 0;
+        showQuestion();
+    });
+
+    // Move to the next question
+    $("#next-question").on("click", function () {
+        if (!hasAnswered) {
+            return;
+        }
+
+        questionIndex++;
+        showQuestion();
+    });
+
+    // Restart the quiz and reset scores
+    $("#restart").on("click", function () {
+        questionIndex = 0;
+        answered = 0;
+        correct = 0;
+
+        updateSummary();
+        showQuestion();
+    });
+
+    // Search language cards and vocabulary words
+    $("#search").on("input", function () {
+        const query = $(this).val().toLowerCase().trim();
+
+        $(".language-card").each(function () {
+            $(this).toggle(
+                $(this).text().toLowerCase().includes(query)
+            );
+        });
+
+        $(".word-item").each(function () {
+            $(this).toggle(
+                $(this).text().toLowerCase().includes(query)
+            );
+        });
+    });
+
+    // Initial display
+    showVocabulary();
+    showQuestion();
+    updateSummary();
+
+});
+</script>
+
+</body>
+</html>
+
